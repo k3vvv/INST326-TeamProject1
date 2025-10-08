@@ -7,7 +7,7 @@ Kevin Miele,
 Keven Day
 
 # Domain Focus/Problem Statement
-The focus of this project is to design A Python program that will allow users 
+The focus of this project is to design a Python program that will allow users 
 to input, process and review their financial transactions in a structured and 
 meaningful way.
 
