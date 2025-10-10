@@ -19,5 +19,19 @@ We plan to help people struggling to answer questions like “Where is my money
 going each month?” or “Am I overspending on subscriptions?”
 # Installation/Setup Instructions
 # Usage Examples for Key Functions 
+There are 5 key functions that will help with the organization and UI data throughout the entire program.
+
+The first key function is Data Validation, making sure that balances make sense, date formats are correct, 
+and verifying that a category is from an allowed list. 
+
+The second key function is Data Cleaning, and making sure that there are no
+duplicates and that all dates are converted into a consistent format. 
+
+The third key function is Data Transformation, which allows the total sum of transactions from an account, identify subscriptions, and create period summaries weekly or monthly.
+
+The fourth key function is Analysis, which filters transactions by period and calculates the average spending per month.
+
+The fifth key function is Storage/Reporting, which saves transactions to either a JSON or CSV file. It can also create
+a readable summary, essentially a bank statement.
 # Function Libary Overview/Organization
 # Contribution Guidelines for Team Members
