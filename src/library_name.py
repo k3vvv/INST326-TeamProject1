@@ -322,8 +322,19 @@ if __name__ == "__main__":
 # import list
 import csv
 # 1-5 Keven Day 
-# 1. Find_largest_transaction 
-# will sort transactions in order from largest to smallest by amount spent 
+# 1. Find_largest_transaction  
+  """will sort transactions in order from largest to smallest by amount spent
+    
+    Args:
+        list of the accounts 
+        
+    Returns:
+        the sorted list
+    
+    examples:
+        sort_largest_transactions(accounts):
+            id 001, amount: 67 id 002, amount: 23 
+    """
 def sort_largest_transaction(accounts):
     unsorted_list = accounts.copy()
     sorted_list = []
@@ -346,7 +357,24 @@ def sort_largest_transaction(accounts):
 
     return(sorted_list)
 # 2. get_transaction_by_date_range
-# will return any transactions that are included in given date range 
+"""will return any transactions that are included in given date range 
+    
+    Args:
+        list of the accounts, start date, end date
+        
+    Returns:
+        accounts with dates in range
+
+    Raises:
+        if date is not in right format
+    
+    examples:
+    result = get_transaction_by_date_range(transactions, "2025-02-01", "2025-05-01")
+    print(result)
+    Skipping transaction 0004: invalid date format '25-03-11'.
+[{'ID': '0002', 'Amount': 33.0, 'Date': '2025-02-02'}, {'ID': '0003', 'Amount': 120.0, 'Date': '2025-03-11'}]
+    
+    """
 def get_transaction_by_date_range(transactions, start_date, end_date):
     # Helper function to validate date format (YYYY-MM-DD)
     def is_valid_date_format(date_str):
