@@ -5,7 +5,7 @@ Team Members: Uzzam Tariq, Keven Day, Kevin Miele, Angelo Montagnino
 """
 
 from datetime import datetime
-from typing import Union, Dict, List, Tuple
+from typing import Any, Union, Dict, List, Tuple
 
 # ============================================================================
 # DATA VALIDATION FUNCTIONS
