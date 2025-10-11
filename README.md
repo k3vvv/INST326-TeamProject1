@@ -35,3 +35,17 @@ The fifth key function is Storage/Reporting, which saves transactions to either 
 a readable summary, essentially a bank statement.
 # Function Libary Overview/Organization
 # Contribution Guidelines for Team Members
+Together team members identified the scope of the project and dicscussed the key
+functions that the project would accomplish.
+
+Once these functions were identified, members divided theses functions among 
+themselves:
+- Uzzam: Data Validation 
+- Kevin: Data Cleaning
+- Angelo: Data Transformation
+- Keven: Data Analysis/Storage
+Each member created 4-5 functions in their respective categories with some 
+collaboration occuring if help was needed.
+
+All members were expected to have their portion of the project completed by
+Saturday night (October 11th).
