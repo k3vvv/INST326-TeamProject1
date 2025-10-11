@@ -697,9 +697,6 @@ def identify_spending_spikes(transactions: list, spending_limit: float = 100) ->
 
     return report.strip()
 
-from datetime import datetime
-from typing import Any, Dict, List, Tuple
-
 # Data Cleaning Functions - Kevin Miele
 # 1-4
 # 1) normalize_date_format
