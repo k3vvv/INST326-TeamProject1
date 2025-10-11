@@ -44,6 +44,7 @@ themselves:
 - Kevin: Data Cleaning
 - Angelo: Data Transformation
 - Keven: Data Analysis/Storage
+
 Each member created 4-5 functions in their respective categories with some 
 collaboration occuring if help was needed.
 
