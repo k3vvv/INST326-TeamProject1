@@ -430,7 +430,21 @@ def get_transaction_by_date_range(transactions, start_date, end_date):
     return matching_transactions
 
 # 3. compare_balance_accounts 
-# will compare different accounts and find the diffence in balance betwneen the two 
+ """ will compare different accounts and find the diffence in balance betwneen the two
+    Args:
+        list of accounts, id1 and id2 
+        
+    Returns:
+        the difference in balance between two accounts 
+
+    Raises: 
+        if the ID listed isnt one in the list 
+    
+    examples:
+     result = compare_balance_accounts(accounts, "0001", "0003")
+        print(result)
+        {'Account 1': '0001', 'Account 2': '0003', 'Balance Difference': 53.0}
+    """
 def compare_balance_accounts(accounts, id1, id2):
     # Step 1: Create placeholders
     balance1 = None
@@ -458,14 +472,29 @@ def compare_balance_accounts(accounts, id1, id2):
         "Balance Difference": difference
     }
    #  4. calculate_monthly_average
-# will compute the total spending of accounts in that month 
+ """ will compute the total spending of accounts in that month 
+    Args:
+        list of accounts
+        
+    Returns:
+        spending per month 
+
+    Raises: 
+        If month format is not correct 
+    
+    examples:
+     result = calculate_monthly_average(transactions)
+     print(result)
+        {'2025-12': {'Total Spending': 100.0, 'Average Transaction': 50.0, 'Transaction Count': 2}, 
+        '2025-03': {'Total Spending': 170.0, 'Average Transaction': 85.0, 'Transaction Count': 2}}
+    """
 def calculate_monthly_average(transactions):
 
     # Step 1: create a dictionary to group transactions by month
     monthly_data = {}
 
-    for transaction in transactions:
-        date = transaction["Date"]
+    for account in accounts:
+        date = account["Date"]
 
         # validation check
         if len(date) != 10 or date[4] != '-' or date[7] != '-':
@@ -477,7 +506,7 @@ def calculate_monthly_average(transactions):
         # Step 3: add transaction amount to that month
         if month_key not in monthly_data:
             monthly_data[month_key] = []
-        monthly_data[month_key].append(transaction["Amount"])
+        monthly_data[month_key].append(account["Amount"])
 
     # Step 4: computess total and average for each month
     monthly_summary = {}
@@ -492,12 +521,22 @@ def calculate_monthly_average(transactions):
 
     return monthly_summary
 # 5. export_to_csv
-# exports the data into a csv file
-def export_to_csv(data, filename):
-    """
+ """
     Exports a list of dictionaries (data) into a CSV file.
+
+    Args:
+    data and name of file which it will be put into
+    
+    Returns:
+    CSV file of accounts
+
+    Raises: 
+    ValueError if list is empty
+    
     Example: export_to_csv(transactions, "transactions.csv")
     """
+def export_to_csv(data, filename):
+ 
 
     # Validation check
     if not data or not isinstance(data, list):
