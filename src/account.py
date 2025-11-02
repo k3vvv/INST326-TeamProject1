@@ -1,3 +1,11 @@
+"""
+Account Class for Financial Tracker ~ Angelo Montagnino
+Course: INST326 Section 0302
+
+This module defines the Account class which represents a single
+financial account in the financial tracker system.
+"""
+
 class Account:
     """
     Represents a financial account that tracks transactions and maintains a dynamic balance.
