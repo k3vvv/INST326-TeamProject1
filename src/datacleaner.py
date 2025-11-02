@@ -64,13 +64,13 @@ class TransactionCleaner:
     
     # Core cleaning methods                 
     def normalize_dates(self) -> int:
-        """Apply `normalize_date_format` to each stored row.
+        """Apply normalize_date_format to each stored row.
 
         Returns:
           int: Count of rows successfully normalized.
 
         Raises:
-          `normalize_date_format`: If a date is missing or formatted incorrectly.
+          normalize_date_format: If a date is missing or formatted incorrectly.
 
 
         Example:
@@ -90,7 +90,7 @@ class TransactionCleaner:
         return count
 
     def clean_descriptions(self) -> int:
-        """Apply `clean_transaction_description` to each stored row.
+        """Apply clean_transaction_description to each stored row.
 
         Returns:
           int: Count of rows successfully cleaned.
@@ -112,7 +112,7 @@ class TransactionCleaner:
         return count
 
     def standardize_categories(self) -> int:
-        """Apply `standardize_category_names` to each stored row.
+        """Apply standardize_category_names to each stored row.
 
         Returns:
           int: Count of rows successfully standardized.
@@ -134,7 +134,7 @@ class TransactionCleaner:
         return count
 
     def deduplicate(self) -> int:
-        """Remove exact duplicates using `remove_duplicate_transactions`.
+        """Remove exact duplicates using remove_duplicate_transactions.
 
         Returns:
           int: Number of rows removed as duplicates.
