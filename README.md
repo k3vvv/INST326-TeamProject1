@@ -50,3 +50,6 @@ collaboration occuring if help was needed.
 
 All members were expected to have their portion of the project completed by
 Saturday night (October 11th).
+
+# System Hierarchy
+
