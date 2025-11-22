@@ -4,6 +4,10 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 import re
 
+# Helper functions for TransactionCleaner:
+# These functions handle the data-cleaning logic by standardizing date formats,
+# cleaning transaction descriptions, normalizing category names, and removing
+# duplicate transactions so the data is consistent before TransactionCleaner.
 
 def normalize_date_format(row: Dict[str, Any]) -> Dict[str, Any]:
     """Convert various date formats into YYYY-MM-DD and store under 'date' key."""
