@@ -1,6 +1,4 @@
-# Financial Tracker System Architecture
-**Author:** Uzzam Tariq  
-**Date:** November 2025  
+# Financial Tracker System Architecture  
 **Course:** INST326 Section 0302
 
 ## Overview
