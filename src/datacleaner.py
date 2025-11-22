@@ -10,7 +10,7 @@ import re
 # duplicate transactions so the data is consistent before TransactionCleaner.
 
 def normalize_date_format(row: Dict[str, Any]) -> Dict[str, Any]:
-    """Convert various date formats into YYYY-MM-DD and store under 'date' key."""
+    """Convert date formats into YYYY-MM-DD and store under 'date' key."""
     new_row = dict(row)
 
     date_value = row.get("date") or row.get("Date")
@@ -354,7 +354,7 @@ class SuspiciousMerchantRule(AlertRule):
 
     def __init__(self, suspicious_keywords: List[str]) -> None:
         super().__init__("Suspicious merchant/description")
-        # normalize keywords to lowercase for case-insensitive matching
+        # Make keywords lowercase so matching works even with different capitalization
         self.suspicious_keywords = [kw.lower() for kw in suspicious_keywords]
 
     def check(self, tx: Dict[str, Any]) -> Optional[str]:
@@ -396,12 +396,12 @@ class StatementMonitor:
 
     @property
     def cleaner(self) -> TransactionCleaner:
-        """Expose the cleaner (read-only reference)."""
+        """The cleaner (read-only reference)."""
         return self._cleaner
 
     @property
     def rules(self) -> List[AlertRule]:
-        """Expose the list of rules so caller can add/remove them."""
+        """The list of rules."""
         return list(self._rules)
 
     def run_full_analysis(self) -> List[str]:
