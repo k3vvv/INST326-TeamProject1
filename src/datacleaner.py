@@ -100,6 +100,13 @@ class TransactionCleaner:
       'Spotify'
       >>> tc.transactions[0]["category"]
       'Subscription'
+
+    This class was created to centralize and organize all data-cleaning logic
+    for financial transactions. By handling inconsistent formats, extra text,
+    and duplicate entries in one place, TransactionCleaner ensures that all
+    transaction data is standardized before being analyzed by other parts of
+    the system. This makes the overall program more reliable, easier to maintain,
+    and better prepared for accurate monitoring and alert detection.
     """
 
     # Initialization
@@ -268,6 +275,19 @@ class TransactionCleaner:
 
 
 ### Project 3 Addition ###
+"""
+Expands the financial statement monitoring system by applying advanced
+object-oriented programming principles. This version introduces an abstract base
+class (AlertRule) with multiple specialized subclasses to demonstrate inheritance
+and polymorphism. These alert rule classes were added to allow the system to check
+transactions for different types of suspicious activity, such as large amounts,
+category limits, and questionable merchants, while still using a shared structure.
+The StatementMonitor class uses composition by containing both a TransactionCleaner
+and a collection of alert rules, allowing it to clean data and evaluate transactions
+in a flexible and organized way. This design improves code structure, makes the
+system easier to expand, and better reflects how real financial monitoring systems
+detect suspicious activity.
+"""
 class AlertRule(ABC):
     """Abstract base class for different alert rules on transactions."""
 
