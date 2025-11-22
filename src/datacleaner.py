@@ -1,10 +1,78 @@
-#Kevin Miele
+# Kevin Miele
 from typing import Any, Dict, Iterable, List, Optional
 from abc import ABC, abstractmethod
+from datetime import datetime
+import re
+
+
+def normalize_date_format(row: Dict[str, Any]) -> Dict[str, Any]:
+    """Convert various date formats into YYYY-MM-DD and store under 'date' key."""
+    new_row = dict(row)
+
+    date_value = row.get("date") or row.get("Date")
+    if not date_value:
+        raise ValueError("Missing date field")
+
+    # Common formats
+    for fmt in ("%m/%d/%Y", "%Y-%m-%d"):
+        try:
+            parsed = datetime.strptime(str(date_value), fmt)
+            new_row["date"] = parsed.strftime("%Y-%m-%d")
+            break
+        except ValueError:
+            continue
+    else:
+        raise ValueError(f"Invalid date format: {date_value}")
+
+    return new_row
+
+
+def clean_transaction_description(row: Dict[str, Any]) -> Dict[str, Any]:
+    """Remove transaction codes and extra numbers from description."""
+    new_row = dict(row)
+
+    desc = row.get("description") or row.get("Description") or ""
+    # Remove trailing codes like #123 or TRN0001
+    cleaned = re.sub(r"[#A-Z0-9]+$", "", desc).strip()
+
+    new_row["description"] = cleaned
+    return new_row
+
+
+def standardize_category_names(row: Dict[str, Any]) -> Dict[str, Any]:
+    """Map inconsistent category names to standardized versions."""
+    new_row = dict(row)
+
+    category = row.get("category", "").lower()
+
+    mapping = {
+        "subscr": "Subscription",
+        "subs": "Subscription",
+        "dining": "Dining",
+        "food": "Dining",
+        "shop": "Shopping",
+    }
+
+    new_row["category"] = mapping.get(category, category.title())
+    return new_row
+
+
+def remove_duplicate_transactions(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Remove duplicate rows by converting dicts to sortable tuples."""
+    seen = set()
+    unique = []
+
+    for row in rows:
+        key = tuple(sorted(row.items()))
+        if key not in seen:
+            seen.add(key)
+            unique.append(row)
+
+    return unique
+
 
 class TransactionCleaner:
-
-  """
+    """
     This class uses the four data-cleaning functions:
     - normalize_date_format(row)
     - clean_transaction_description(row)
@@ -16,11 +84,11 @@ class TransactionCleaner:
 
     Example:
       >>> rows = [
-      ...   {"Date":"9/1/2025","Amount":"9.99","Description":"Spotify #123","category":"subscr","account":"visa"},
-      ...   {"date":"2025-09-01","amount":9.99,"description":"Spotify","category":"Subscription","account":"Visa"},
+      ...   {"Date": "9/1/2025", "Amount": "9.99", "Description": "Spotify #123", "category": "subscr", "account": "visa"},
+      ...   {"date": "2025-09-01", "amount": 9.99, "description": "Spotify", "category": "Subscription", "account": "Visa"},
       ... ]
       >>> tc = TransactionCleaner(rows)
-      >>> tc.clean_all()             # normalize dates, clean descriptions, standardize categories, removing duplicates
+      >>> tc.clean_all()             # normalize dates, clean descriptions, standardize categories, remove duplicates
       1
       >>> tc.transactions[0]["date"]
       '2025-09-01'
@@ -30,17 +98,15 @@ class TransactionCleaner:
       'Subscription'
     """
 
-
     # Initialization
     def __init__(self, rows: Optional[Iterable[Dict[str, Any]]] = None) -> None:
-        """Initialize the cleaner
+        """Initialize the cleaner.
 
         Args:
           rows: Optional set of transactions, each stored as a dictionary.
 
         Raises:
           TypeError: If rows can’t be looped through or has items that aren’t dictionaries.
-
         """
         self._transactions: List[Dict[str, Any]] = []
         if rows is not None:
@@ -62,8 +128,7 @@ class TransactionCleaner:
         """Number of transactions currently stored."""
         return len(self._transactions)
 
-    
-    # Core cleaning methods                 
+    # Core cleaning methods
     def normalize_dates(self) -> int:
         """Apply normalize_date_format to each stored row.
 
@@ -71,11 +136,10 @@ class TransactionCleaner:
           int: Count of rows successfully normalized.
 
         Raises:
-          normalize_date_format: If a date is missing or formatted incorrectly.
-
+          Error from normalize_date_format: If a date is missing or formatted incorrectly.
 
         Example:
-          >>> tc = TransactionCleaner([{"Date":"10/11/2025"}])
+          >>> tc = TransactionCleaner([{"Date": "10/11/2025"}])
           >>> tc.normalize_dates()
           1
           >>> tc.transactions[0]["date"]
@@ -97,7 +161,7 @@ class TransactionCleaner:
           int: Count of rows successfully cleaned.
 
         Example:
-          >>> tc = TransactionCleaner([{"description":"Starbucks TRN0001"}])
+          >>> tc = TransactionCleaner([{"description": "Starbucks TRN0001"}])
           >>> tc.clean_descriptions()
           1
           >>> tc.transactions[0]["description"]
@@ -119,7 +183,7 @@ class TransactionCleaner:
           int: Count of rows successfully standardized.
 
         Example:
-          >>> tc = TransactionCleaner([{"category":"subscr"}])
+          >>> tc = TransactionCleaner([{"category": "subscr"}])
           >>> tc.standardize_categories()
           1
           >>> tc.transactions[0]["category"]
@@ -142,8 +206,8 @@ class TransactionCleaner:
 
         Example:
           >>> rows = [
-          ...   {"date":"2025-09-03","amount":"25.00","description":"Amazon","category":"Shopping","account":"Checking"},
-          ...   {"date":"2025-09-03","amount":25.0,"description":"Amazon","category":"Shopping","account":"checking"},
+          ...   {"date": "2025-09-03", "amount": "25.00", "description": "Amazon", "category": "Shopping", "account": "Checking"},
+          ...   {"date": "2025-09-03", "amount": 25.0, "description": "Amazon", "category": "Shopping", "account": "checking"},
           ... ]
           >>> tc = TransactionCleaner(rows)
           >>> removed = tc.deduplicate()
@@ -167,13 +231,13 @@ class TransactionCleaner:
         Notes:
         - If something goes wrong, the error will stop the process.
         - After cleaning, all transactions will use the same key names:
-          'date', 'description', and 'category', along with the original fields 
+          'date', 'description', and 'category', along with the original fields
           like 'amount' and 'account'.
 
         Example:
           >>> rows = [
-          ...   {"Date":"9/1/2025","Amount":"9.99","Description":"Spotify #123","category":"subscr","account":"visa"},
-          ...   {"date":"2025-09-01","amount":9.99,"description":"Spotify","category":"Subscription","account":"Visa"},
+          ...   {"Date": "9/1/2025", "Amount": "9.99", "Description": "Spotify #123", "category": "subscr", "account": "visa"},
+          ...   {"date": "2025-09-01", "amount": 9.99, "description": "Spotify", "category": "Subscription", "account": "Visa"},
           ... ]
           >>> tc = TransactionCleaner(rows)
           >>> tc.clean_all()
@@ -198,7 +262,8 @@ class TransactionCleaner:
         """Class name and size."""
         return f"{self.__class__.__name__}(rows={self.size})"
 
-###Project 3 Addition###
+
+### Project 3 Addition ###
 class AlertRule(ABC):
     """Abstract base class for different alert rules on transactions."""
 
@@ -218,7 +283,8 @@ class AlertRule(ABC):
     def describe(self) -> str:
         """Non-abstract method that subclasses can extend with super()."""
         return f"Rule: {self.name}"
-####################################################################################
+
+
 class LargeTransactionRule(AlertRule):
     """Flags transactions above a certain amount."""
 
@@ -243,7 +309,8 @@ class LargeTransactionRule(AlertRule):
                 f"at {tx.get('description', 'Unknown merchant')}"
             )
         return None
-#####################################################################################
+
+
 class CategoryLimitRule(AlertRule):
     """
     Flags a single transaction that exceeds a per-transaction
@@ -273,7 +340,8 @@ class CategoryLimitRule(AlertRule):
                 f"({tx.get('description', 'Unknown merchant')})"
             )
         return None
-########################################################################################
+
+
 class SuspiciousMerchantRule(AlertRule):
     """
     Flags transactions whose description contains any suspicious keyword.
@@ -294,7 +362,8 @@ class SuspiciousMerchantRule(AlertRule):
                     f"on {tx.get('date')}"
                 )
         return None
-##########################################################################################
+
+
 class StatementMonitor:
     """
     High-level object that:
@@ -350,7 +419,7 @@ class StatementMonitor:
                     alerts.append(msg)
         return alerts
 
-############################DEMO#####################################################
+#########################DEMO########################################################################
 if __name__ == "__main__":
     sample_rows = [
         {
@@ -386,4 +455,3 @@ if __name__ == "__main__":
     print("\n=== Alerts ===")
     for a in alerts:
         print(a)
-
